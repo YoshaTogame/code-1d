@@ -1078,9 +1078,9 @@ void FluxMUSCL(Eigen::VectorXd &Flux, DataFile *df, Eigen::VectorXd &vecU, doubl
         penteV[i] = (v[i]-v[i-1])/dx;
     }
     for (int i=0; i<Nx; i++){
-        limRho[i] = minmod(penteRho[i+1],penteRho[i]);
-        limU[i] = minmod(penteU[i+1],penteU[i]);
-        limV[i] = minmod(penteV[i+1],penteV[i]);
+        limRho[i] = minmod(penteRho[i+1],penteRho[i],0,RhoG);
+        limU[i] = minmod(penteU[i+1],penteU[i],0,RhoG);
+        limV[i] = minmod(penteV[i+1],penteV[i],0,RhoG);
     }
     for (int i=0; i<Nx-1; i++){
         //on fait les VarG et VarD
@@ -1155,10 +1155,12 @@ void FluxMUSCL(Eigen::VectorXd &Flux, DataFile *df, Eigen::VectorXd &vecU, doubl
     }
 
     //on ajoute l'écriture de fichier
+    #if 0
     if (affiche){
         std::string resultatChemin(df->getResultatChemin());
         
     }
+    #endif
 }
 
 
