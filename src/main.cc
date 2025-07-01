@@ -31,6 +31,7 @@ int main(int argc, char **argv){
     DataFile *df = new DataFile(data_file_name);
     df->litLeFichier();
     int debug = df->getDebug();
+    //debug=1;
     //df->changeNx(VraiNx);
     //std::cout << VraiNx << " " << df->getNx() << std::endl;
     int nbImg = df->getNbImg();
@@ -121,8 +122,8 @@ int main(int argc, char **argv){
                 dt=dtempo;
             }
         }
-        dt = cfl*dx/dt;
-
+        //dt = cfl*dx*dx/dt;
+        dt = cfl*dx*dx/dt;
         if (time+dt > tempsSortie){
             dt = tempsSortie-time;
             time2=time;
@@ -148,7 +149,22 @@ int main(int argc, char **argv){
         }
         //phase hyperbolique
         FluxRusanov2(Flux, df, vecU, time2);
-        //std::cout << "Flux = " << Flux << std::endl;
+        //FluxMUSCL(Flux, df, vecU, time2, pdt, affiche);
+        #if 0
+        std::cout << "Flux = " << std::endl;
+        for (int i=0; i<Nx; i++){
+            std::cout << Flux[i] << " " ;
+        }
+        std::cout << " premier flux " << std::endl;
+        for (int i=0; i<Nx; i++){
+            std::cout << Flux[i+Nx] << " " ;
+        }
+        std::cout << " deuxieme flux " << std::endl;
+        for (int i=0; i<Nx; i++){
+            std::cout << Flux[i+2*Nx] << " " ;
+        }
+        std::cout << " troisieme flux " << std::endl;
+        #endif
         updateRusanov2(vecU,Flux,df, dt, time2);
         //std::cout << "sans source, vecU =" << vecU << std::endl;
         if (debug==1){

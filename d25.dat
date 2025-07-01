@@ -2,11 +2,11 @@
 Cas
 1
 nbImg
-10
+20
 nbPts
 -1
 Chemin
-output/25/
+output/25d/
 #parametres maillage
 Nx 
 25000

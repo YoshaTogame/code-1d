@@ -26,6 +26,8 @@ void FluxRusanov(Eigen::VectorXd &Flux, DataFile *df, Eigen::VectorXd &vecU, dou
 
 void FluxRusanov2(Eigen::VectorXd &Flux, DataFile *df, Eigen::VectorXd &vecU, double t);
 
+void FluxMUSCL(Eigen::VectorXd &Flux, DataFile *df, Eigen::VectorXd &vecU, double t, int pdt, bool ecrit);
+
 void updateRusanov(Eigen::VectorXd &vecU, Eigen::VectorXd &Flux, DataFile *df, double dt, double t);
 
 void updateRusanov2(Eigen::VectorXd &vecU, Eigen::VectorXd &Flux, DataFile *df, double dt, double t);
@@ -91,3 +93,5 @@ void BuildMatG3 (Eigen::SparseMatrix<double> &MatG, DataFile *df, double dt, Eig
 void Print_Psi(Eigen::VectorXd VecPsi, double t, DataFile *df, int pdt);
 
 void InitFromFiles(Eigen::VectorXd &vecU, DataFile *df);
+
+double minmod(double a, double b, int i, Eigen::VectorXd & pente);

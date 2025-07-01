@@ -482,7 +482,7 @@ void Initialize(Eigen::VectorXd &vecU, DataFile *df )
     else if (cas==1)
     {
         //probleme de Riemann dispersif
-        double invdelta = 1000;
+        double invdelta = 10;
         for (int i=0; i<Nx; i++){
             x = xmin+0.5*dx+i*dx;
             rho[i] = 1.5 - 0.5*tanh(invdelta*x);
@@ -969,6 +969,198 @@ void FluxRusanov2(Eigen::VectorXd &Flux, DataFile *df, Eigen::VectorXd &vecU, do
         Flux[3*Nx-1] = 0.5*(Fv[0]+Fv[Nx-1]) -0.5*lRusanov[Nx-1]*(vecU[2*Nx]-vecU[3*Nx-1]);
     }
 }
+
+
+void FluxMUSCL(Eigen::VectorXd &Flux, DataFile *df, Eigen::VectorXd &vecU, double t)
+{
+    int cas(df->getCas());
+    int Nx(df->getNx());
+    double xmin(df->getXMin());
+    double xmax(df->getXMax());
+    double dx = (xmax-xmin)/Nx;
+    double gamma(df->getGamma());
+    double r(df->getR());
+    double kappa(df->getKappa());
+    double nu(df->getNu());
+    Eigen::VectorXd rho(Nx);
+    Eigen::VectorXd Frho(Nx);
+    Eigen::VectorXd u(Nx);
+    Eigen::VectorXd Fu(Nx);
+    Eigen::VectorXd v(Nx);
+    Eigen::VectorXd Fv(Nx);
+    Eigen::VectorXd maxLambda(Nx);
+    Eigen::VectorXd lRusanov(Nx);
+    Eigen::VectorXd FrhoM(Nx);
+    Eigen::VectorXd FuM(Nx);
+    Eigen::VectorXd FvM(Nx);
+    Eigen::VectorXd penteRho(Nx+1);
+    Eigen::VectorXd penteU(Nx+1);
+    Eigen::VectorXd penteV(Nx+1);
+    Eigen::VectorXd limRho(Nx);
+    Eigen::VectorXd limU(Nx);
+    Eigen::VectorXd limV(Nx);
+    Eigen::VectorXd Rho2(Nx);
+    Eigen::VectorXd U2(Nx);
+    Eigen::VectorXd V2(Nx);
+    Eigen::VectorXd RhoG(Nx+1);
+    Eigen::VectorXd UG(Nx+1);
+    Eigen::VectorXd VG(Nx+1);
+    Eigen::VectorXd RhoD(Nx+1);
+    Eigen::VectorXd UD(Nx+1);
+    Eigen::VectorXd VD(Nx+1);
+    Eigen::VectorXd FrhoG(Nx);
+    Eigen::VectorXd FrhoD(Nx);
+    Eigen::VectorXd FuG(Nx);
+    Eigen::VectorXd FuD(Nx);
+    Eigen::VectorXd FvG(Nx);
+    Eigen::VectorXd FvD(Nx);
+    //on affiche la pente choisi pour rho
+    Eigen::VectorXd pente(Nx);
+    for (int i=0; i<Nx; i++){
+        rho[i] = vecU[i];
+        u[i] = vecU[i+Nx]/vecU[i];
+        v[i] = vecU[i+2*Nx]/vecU[i];
+    }
+    //on ajoute les lrusanov
+    if (cas==0 || cas==1){
+        //pression en p^2/2
+        for (int i=0; i<Nx; i++){
+            Frho[i] = vecU[i+Nx];
+            Fu[i] = u[i] * vecU[i+Nx] + 0.5*pow(vecU[i],2);
+            Fv[i] = u[i] * vecU[i+2*Nx];
+            maxLambda[i] = abs(u[i])+sqrt(rho[i]);
+        }
+    }
+    else {
+        //pression en rho gamma
+        for (int i=0; i<Nx; i++){
+            Frho[i] = vecU[i+Nx];
+            Fu[i] = u[i] * vecU[i+Nx] + pow(vecU[i],df->getGamma())+2.*r*kappa*nu*vecU[i];
+            Fv[i] = u[i] * vecU[i+2*Nx];
+            maxLambda[i] = abs(u[i])+sqrt(gamma*pow(rho[i],gamma-1)+2.*r*kappa*nu);
+        }
+    }
+    for (int i=0; i<Nx-1; i++){
+        lRusanov[i] = (maxLambda[i+1]<maxLambda[i]) ? maxLambda[i] : maxLambda[i+1];
+    }
+    if (cas==1){
+        //cas dirichlet ? pas besoin de le définir
+        //lRusanov[Nx-1] = -1.;
+        lRusanov[Nx-1] = (maxLambda[0]<maxLambda[Nx-1]) ? maxLambda[Nx-1] : maxLambda[0];
+    }
+    else {
+        //cas périodique
+        lRusanov[Nx-1] = (maxLambda[0]<maxLambda[Nx-1]) ? maxLambda[Nx-1] : maxLambda[0];
+    }
+
+    if (cas==1){
+        //cas non périodique
+        penteRho[0] = (rho[0]-2.)/dx;
+        penteU[0] = (u[0]-0.)/dx;
+        penteV[0] = (v[0]-0.)/dx;
+        penteRho[Nx] = (1.-rho[Nx-1])/dx;
+        penteU[Nx] = (0.-u[Nx-1])/dx;
+        penteV[Nx] = (0.-v[Nx-1])/dx;
+    }
+    else {
+        //cas périodique
+        penteRho[0] = (rho[0]-rho[Nx-1])/dx;
+        penteU[0] = (u[0]-u[Nx-1])/dx;
+        penteV[0] = (v[0]-v[Nx-1])/dx;
+        penteRho[Nx] = penteRho[0];
+        penteU[Nx] = penteU[0];
+        penteV[Nx] = penteV[0];
+    }
+    for (int i=1; i<Nx; i++){
+        //pentes internes
+        penteRho[i] = (rho[i]-rho[i-1])/dx;
+        penteU[i] = (u[i]-u[i-1])/dx;
+        penteV[i] = (v[i]-v[i-1])/dx;
+    }
+    for (int i=0; i<Nx; i++){
+        limRho[i] = minmod(penteRho[i+1],penteRho[i]);
+        limU[i] = minmod(penteU[i+1],penteU[i]);
+        limV[i] = minmod(penteV[i+1],penteV[i]);
+    }
+    for (int i=0; i<Nx-1; i++){
+        //on fait les VarG et VarD
+        RhoG[i] = rho[i] + 0.5*dx*limRho[i];
+        RhoD[i] = rho[i+1] - 0.5*dx*limRho[i+1];
+        UG[i] = u[i] + 0.5*dx*limU[i];
+        UD[i] = u[i+1] - 0.5*dx*limU[i+1];
+        VG[i] = v[i] + 0.5*dx*limV[i];
+        VD[i] = v[i+1] - 0.5*dx*limV[i+1];
+        //RhoG[i] = rho[i-1] ;
+        //RhoD[i] = rho[i] ;
+        //UG[i] = u[i-1] ;
+        //UD[i] = u[i] ;
+        //VG[i] = v[i-1] ;
+        //VD[i] = v[i] ;
+    }
+    //on fait les conditions limites 
+    if (cas==1){
+        //RhoG[0] = 2.;
+        //RhoD[0] = rho[0] - 0.5*dx*limRho[0];
+        RhoG[Nx-1] = rho[Nx-1] + 0.5*dx*limRho[Nx-1];
+        RhoD[Nx-1] = 1.;
+        //UG[0] = 0.;
+        //UD[0] = u[0] - 0.5*dx*limU[0];
+        UG[Nx-1] = u[Nx-1] + 0.5*dx*limU[Nx-1];
+        UD[Nx-1] = 0.;
+        //VG[0] = 0.;
+        //VD[0] = v[0] - 0.5*dx*limV[0];
+        VG[Nx-1] = v[Nx-1] + 0.5*dx*limV[Nx-1];
+        VD[Nx-1] = 0.;
+    }
+    else {
+        //RhoG[0] = rho[Nx-1] + 0.5*dx*limRho[Nx-1];
+        //RhoD[0] = rho[0] - 0.5*dx*limRho[0];
+        RhoG[Nx-1] = rho[Nx-1] + 0.5*dx*limRho[Nx-1];
+        RhoD[Nx-1] = rho[0] -0.5*dx*limRho[0];
+        //UG[0] = u[Nx-1] + 0.5*dx*limU[Nx-1];
+        //UD[0] = u[0] - 0.5*dx*limU[0];
+        UG[Nx-1] = u[Nx-1] + 0.5*dx*limU[Nx-1];
+        UD[Nx-1] = u[0] - 0.5*dx*limU[0];
+        //VG[0] = v[Nx-1] + 0.5*dx*limV[Nx-1];
+        //VD[0] = v[0] - 0.5*dx*limV[0];
+        VG[Nx-1] = v[Nx-1] + 0.5*dx*limV[Nx-1];
+        VD[Nx-1] = v[0] - 0.5*dx*limV[0];
+    }
+    //on défini les F en variables conservatives
+    if (cas==0 || cas==1){
+        for (int i=0; i<Nx; i++){
+            FrhoG[i] = RhoG[i]*UG[i];
+            FrhoD[i] = RhoD[i]*UD[i];
+            FuG[i] = FrhoG[i]*UG[i] + 0.5*pow(RhoG[i],2);
+            FuD[i] = FrhoD[i]*UD[i] + 0.5*pow(RhoD[i],2);
+            FvG[i] = FrhoG[i]*VG[i];
+            FvD[i] = FrhoD[i]*VD[i];
+        }
+    }
+    else {
+        for (int i=0; i<Nx; i++){
+            FrhoG[i] = RhoG[i]*UG[i];
+            FrhoD[i] = RhoD[i]*UD[i];
+            FuG[i] = FrhoG[i]*UG[i] + pow(RhoG[i],gamma);
+            FuD[i] = FrhoD[i]*UD[i] + pow(RhoD[i],gamma);
+            FvG[i] = FrhoG[i]*VG[i];
+            FvD[i] = FrhoD[i]*VD[i];
+        }
+    }
+    //on défini les flux
+    for (int i=0; i<Nx; i++){
+        Flux[i] = 0.5*(FrhoG[i]+FrhoD[i])+0.5*lRusanov[i]*(RhoG[i]-RhoD[i]);
+        Flux[i+Nx] = 0.5*(FuG[i]+FuD[i])+0.5*lRusanov[i]*(RhoG[i]*UG[i]-RhoD[i]*UD[i]);
+        Flux[i+2*Nx] = 0.5*(FvG[i]+FvD[i])+0.5*lRusanov[i]*(RhoG[i]*VG[i]-RhoD[i]*VD[i]);
+    }
+
+    //on ajoute l'écriture de fichier
+    if (affiche){
+        std::string resultatChemin(df->getResultatChemin());
+        
+    }
+}
+
 
 void updateRusanov(Eigen::VectorXd &vecU, Eigen::VectorXd &Flux, DataFile *df, double dt, double t)
 {
@@ -2801,4 +2993,23 @@ void InitFromFiles(Eigen::VectorXd &vecU, DataFile *df)
 {
     //On veut faire une initialisation à partir d'un fichier de données
     //a finir
+}
+
+double minmod(double a, double b, int i, Eigen::VectorXd &pente){
+    double res;
+    if (a*b<0){
+        res = 0.;
+        pente[i] = -10.;
+    }
+    else if (abs(a) < abs(b)){
+        res = a;
+        pente[i] = 0.;
+    }
+    else {
+        res = b;
+        pente[i] = 10.;
+    }
+    //on fait sans augmentation pour l'instant, il faut retrouver rusanov
+    //res = 0.;
+    return res;
 }

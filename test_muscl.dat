@@ -1,0 +1,31 @@
+#parametres globaux
+Cas
+0
+nbImg
+100
+nbPts
+-1
+Chemin
+output/muscl/1600/
+#parametres maillage
+Nx 
+1600
+xmin
+-20.
+xmax
+20.
+tmax
+20.
+cfl
+0.9
+# parametres physiques
+gamma
+1.4
+kappa
+0.0
+nu
+0.0
+epsilon
+0.5
+r
+0.0
