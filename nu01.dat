@@ -1,0 +1,31 @@
+#parametres globaux
+Cas
+1
+nbImg
+20
+nbPts
+-1
+Chemin
+output/nu01/
+#parametres maillage
+Nx 
+400000
+xmin
+-300.
+xmax
+300.
+tmax
+70.
+cfl
+0.5
+# parametres physiques
+gamma
+1.4
+kappa
+0.0
+nu
+0.1
+epsilon
+0.5
+r
+0.0

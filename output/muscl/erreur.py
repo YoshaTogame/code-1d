@@ -42,7 +42,8 @@ def calcul_erreur(n):
     rhoe = rho(x)
     ue = u(x)
     ve = v(x)
-    sh = np.sqrt(1/n)
+    #sh = np.sqrt(1/n)
+    sh = 40./n
 ##    if (n==100):
 ##        print(rhon)
 ##        print(rhoe)
