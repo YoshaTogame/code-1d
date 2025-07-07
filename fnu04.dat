@@ -6,10 +6,10 @@ nbImg
 nbPts
 -1
 Chemin
-output/gnu04/
+output/fnu04/
 #parametres maillage
 Nx 
-200000
+400000
 xmin
 -300.
 xmax

@@ -6,10 +6,10 @@ nbImg
 nbPts
 -1
 Chemin
-output/nu002/
+output/gnu002/
 #parametres maillage
 Nx 
-400000
+200000
 xmin
 -300.
 xmax
