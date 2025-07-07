@@ -1,0 +1,223 @@
+tmax =70 cas = 1 Nx = 1000
+on a fait initialize
+on a fait le laplacien
+time sans arret =0.397305
+time sans arret =0.746089
+time sans arret =1.07947
+time sans arret =1.40699
+time sans arret =1.73338
+time sans arret =2.05667
+time sans arret =2.37897
+time sans arret =2.70076
+time sans arret =3.02156
+time sans arret =3.34221
+time = 3.5 ,dt = 0.15779 ,pdt =1
+time sans arret =3.82026
+time sans arret =4.1403
+time sans arret =4.46023
+time sans arret =4.78005
+time sans arret =5.09978
+time sans arret =5.41942
+time sans arret =5.73899
+time sans arret =6.05852
+time sans arret =6.37801
+time sans arret =6.69747
+time = 7 ,dt = 0.302528 ,pdt =2
+time sans arret =7.31941
+time sans arret =7.63881
+time sans arret =7.95818
+time sans arret =8.27753
+time sans arret =8.59687
+time sans arret =8.91621
+time sans arret =9.23553
+time sans arret =9.55484
+time sans arret =9.87414
+time sans arret =10.1934
+time = 10.5 ,dt = 0.306564 ,pdt =3
+time sans arret =10.8193
+time sans arret =11.1386
+time sans arret =11.4578
+time sans arret =11.7771
+time sans arret =12.0964
+time sans arret =12.4156
+time sans arret =12.7349
+time sans arret =13.0541
+time sans arret =13.3734
+time sans arret =13.6926
+time = 14 ,dt = 0.307362 ,pdt =4
+time sans arret =14.3192
+time sans arret =14.6385
+time sans arret =14.9577
+time sans arret =15.277
+time sans arret =15.5962
+time sans arret =15.9155
+time sans arret =16.2347
+time sans arret =16.554
+time sans arret =16.8732
+time sans arret =17.1925
+time = 17.5 ,dt = 0.307547 ,pdt =5
+time sans arret =17.8192
+time sans arret =18.1385
+time sans arret =18.4577
+time sans arret =18.777
+time sans arret =19.0962
+time sans arret =19.4154
+time sans arret =19.7347
+time sans arret =20.0539
+time sans arret =20.3732
+time sans arret =20.6924
+time = 21 ,dt = 0.307602 ,pdt =6
+time sans arret =21.3192
+time sans arret =21.6385
+time sans arret =21.9577
+time sans arret =22.2769
+time sans arret =22.5962
+time sans arret =22.9154
+time sans arret =23.2346
+time sans arret =23.5539
+time sans arret =23.8731
+time sans arret =24.1923
+time = 24.5 ,dt = 0.307659 ,pdt =7
+time sans arret =24.8192
+time sans arret =25.1385
+time sans arret =25.4577
+time sans arret =25.7769
+time sans arret =26.0961
+time sans arret =26.4154
+time sans arret =26.7346
+time sans arret =27.0538
+time sans arret =27.3731
+time sans arret =27.6923
+time = 28 ,dt = 0.307718 ,pdt =8
+time sans arret =28.3192
+time sans arret =28.6384
+time sans arret =28.9577
+time sans arret =29.2769
+time sans arret =29.5961
+time sans arret =29.9153
+time sans arret =30.2346
+time sans arret =30.5538
+time sans arret =30.873
+time sans arret =31.1922
+time = 31.5 ,dt = 0.307777 ,pdt =9
+time sans arret =31.8192
+time sans arret =32.1384
+time sans arret =32.4577
+time sans arret =32.7769
+time sans arret =33.0961
+time sans arret =33.4153
+time sans arret =33.7345
+time sans arret =34.0537
+time sans arret =34.373
+time sans arret =34.6922
+time = 35 ,dt = 0.307833 ,pdt =10
+time sans arret =35.3192
+time sans arret =35.6384
+time sans arret =35.9576
+time sans arret =36.2769
+time sans arret =36.5961
+time sans arret =36.9153
+time sans arret =37.2345
+time sans arret =37.5537
+time sans arret =37.8729
+time sans arret =38.1921
+time = 38.5 ,dt = 0.307881 ,pdt =11
+time sans arret =38.8192
+time sans arret =39.1384
+time sans arret =39.4576
+time sans arret =39.7768
+time sans arret =40.096
+time sans arret =40.4152
+time sans arret =40.7345
+time sans arret =41.0537
+time sans arret =41.3729
+time sans arret =41.6921
+time = 42 ,dt = 0.307927 ,pdt =12
+time sans arret =42.3192
+time sans arret =42.6384
+time sans arret =42.9576
+time sans arret =43.2768
+time sans arret =43.596
+time sans arret =43.9152
+time sans arret =44.2344
+time sans arret =44.5536
+time sans arret =44.8728
+time sans arret =45.192
+time = 45.5 ,dt = 0.307965 ,pdt =13
+time sans arret =45.8192
+time sans arret =46.1384
+time sans arret =46.4576
+time sans arret =46.7768
+time sans arret =47.096
+time sans arret =47.4152
+time sans arret =47.7344
+time sans arret =48.0536
+time sans arret =48.3728
+time sans arret =48.692
+time = 49 ,dt = 0.308001 ,pdt =14
+time sans arret =49.3192
+time sans arret =49.6384
+time sans arret =49.9576
+time sans arret =50.2768
+time sans arret =50.596
+time sans arret =50.9152
+time sans arret =51.2344
+time sans arret =51.5536
+time sans arret =51.8728
+time sans arret =52.192
+time = 52.5 ,dt = 0.308031 ,pdt =15
+time sans arret =52.8192
+time sans arret =53.1384
+time sans arret =53.4576
+time sans arret =53.7768
+time sans arret =54.096
+time sans arret =54.4152
+time sans arret =54.7344
+time sans arret =55.0536
+time sans arret =55.3727
+time sans arret =55.6919
+time = 56 ,dt = 0.308059 ,pdt =16
+time sans arret =56.3192
+time sans arret =56.6384
+time sans arret =56.9576
+time sans arret =57.2768
+time sans arret =57.596
+time sans arret =57.9152
+time sans arret =58.2343
+time sans arret =58.5535
+time sans arret =58.8727
+time sans arret =59.1919
+time = 59.5 ,dt = 0.308084 ,pdt =17
+time sans arret =59.8192
+time sans arret =60.1384
+time sans arret =60.4576
+time sans arret =60.7768
+time sans arret =61.0959
+time sans arret =61.4151
+time sans arret =61.7343
+time sans arret =62.0535
+time sans arret =62.3727
+time sans arret =62.6919
+time = 63 ,dt = 0.308106 ,pdt =18
+time sans arret =63.3192
+time sans arret =63.6384
+time sans arret =63.9576
+time sans arret =64.2768
+time sans arret =64.5959
+time sans arret =64.9151
+time sans arret =65.2343
+time sans arret =65.5535
+time sans arret =65.8727
+time sans arret =66.1919
+time = 66.5 ,dt = 0.308127 ,pdt =19
+time sans arret =66.8192
+time sans arret =67.1384
+time sans arret =67.4576
+time sans arret =67.7767
+time sans arret =68.0959
+time sans arret =68.4151
+time sans arret =68.7343
+time sans arret =69.0535
+time sans arret =69.3727
+time sans arret =69.6919
+time = 70 ,dt = 0.308146 ,pdt =20

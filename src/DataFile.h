@@ -17,6 +17,7 @@ private:
     int _nbImg; 
     int _nbPts;
     std::string _resultatChemin;
+    std::string _resultatLog;
     int _debug;
 
     //parametre maillage

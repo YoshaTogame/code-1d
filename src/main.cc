@@ -32,6 +32,13 @@ int main(int argc, char **argv){
     df->litLeFichier();
     int debug = df->getDebug();
     //debug=1;
+
+    //on fait un fichier log
+    std::string resultatChemin(df->getResultatChemin());
+    std::string filenamelog;
+    filenamelog = resultatChemin + "log.dat";
+    std::ofstream file_log(filenamelog);
+
     //df->changeNx(VraiNx);
     //std::cout << VraiNx << " " << df->getNx() << std::endl;
     int nbImg = df->getNbImg();
@@ -54,7 +61,8 @@ int main(int argc, char **argv){
     double dtempo;
     double tempsSortie=0.;
     bool affiche = false;
-    std::cout << "tmax =" << tmax << " cas = "<< cas << " Nx = " << Nx << std::endl;
+    //std::cout << "tmax =" << tmax << " cas = "<< cas << " Nx = " << Nx << std::endl;
+    file_log << "tmax =" << tmax << " cas = "<< cas << " Nx = " << Nx << std::endl;
     std::vector<double> vecRho(Nx);
     Eigen::VectorXd vecU(3*Nx);
     Eigen::VectorXd rho(Nx);
@@ -79,10 +87,16 @@ int main(int argc, char **argv){
     Eigen::SparseMatrix<double> MatG(2*Nx,2*Nx);
     Eigen::BiCGSTAB<SparseMatrix<double>, Eigen::IncompleteLUT<double>> solverM;
     Eigen::SparseLU<SparseMatrix<double>, COLAMDOrdering<int>> solverM2;
+
+
     Initialize(vecU, df);
-    std::cout << "on a fait initialize" << std::endl;
-    LPsi = LaplacianPsi(df);
-    std::cout << "on a fait le laplacien" << std::endl;
+    //std::cout << "on a fait initialize" << std::endl;
+    file_log << "on a fait initialize" << std::endl;
+    
+    //LPsi = LaplacianPsi(df);
+
+    //std::cout << "on a fait le laplacien" << std::endl;
+    file_log << "on a fait le laplacien" << std::endl;
     saveSol(df, vecU, pdt);
     tempsSortie = tmax/nbImg;
     std::list<double> energieList;
@@ -123,7 +137,7 @@ int main(int argc, char **argv){
             }
         }
         //dt = cfl*dx*dx/dt;
-        dt = cfl*dx*dx/dt;
+        dt = cfl*dx/dt;
         if (time+dt > tempsSortie){
             dt = tempsSortie-time;
             time2=time;
@@ -137,11 +151,13 @@ int main(int argc, char **argv){
                 tempsSortie = std::min(tempsSortie+tmax/nbImg,tmax);
             }
             affiche = true;
-            std::cout << "time = " << time << " ,dt = " << dt << " ,pdt =" << pdt << std::endl;
+            //std::cout << "time = " << time << " ,dt = " << dt << " ,pdt =" << pdt << std::endl;
+            file_log << "time = " << time << " ,dt = " << dt << " ,pdt =" << pdt << std::endl;
         }
         else {
             time2 = time;
             time = time+dt;
+            file_log << "time sans arret =" << time << std::endl;
         }
         //affiche=true;
         if (debug==1){
